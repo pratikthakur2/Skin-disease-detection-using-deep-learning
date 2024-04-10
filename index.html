@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skin Disease Detection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #upload-form {
+            margin-bottom: 20px;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+        }
+        #output-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+        .disease-info {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Skin Disease Detection</h1>
+    <form id="upload-form" action="/upload_image" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*">
+        <input type="submit" value="Upload Image">
+    </form>
+    
+    <div id="result">
+        <h2>Predicted Disease:</h2>
+        <input type="file" id="uploadInput" accept="image/*">
+        <div id="outputImage"></div>
+    
+        <script>
+            const uploadInput = document.getElementById('uploadInput');
+            const outputImage = document.getElementById('outputImage');
+
+            uploadInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        const imageUrl = e.target.result;
+                        outputImage.innerHTML = `<img src="${imageUrl}" alt="Uploaded Image">`;
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+
+        </script>
+        <div id="output-image"></div>
+        <div id="disease-info" class="disease-info"></div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('/upload_image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResult(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+            const outputImage = document.getElementById('output-image');
+            const diseaseInfo = document.getElementById('disease-info');
+        
+            outputImage.innerHTML = `<img src="data:image/jpeg;base64,${data.image}" alt="Uploaded Image">`;
+            diseaseInfo.textContent = `Predicted Disease: ${data.prediction}`;
+        
+            resultDiv.style.display = 'block';
+        }
+        
+        }
+    </script>
+</body>
+</html>
+

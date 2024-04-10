@@ -1,0 +1,29 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+#upload-form {
+    margin-bottom: 20px;
+}
+
+#result {
+    display: none;
+    margin-top: 20px;
+}
+
+#output-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+.disease-info {
+    margin-top: 10px;
+    font-weight: bold;
+}
